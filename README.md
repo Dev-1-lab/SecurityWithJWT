@@ -23,10 +23,10 @@ Security konfiguratsiyasi`
 
 
  
- package com.example.securitywithjwt.controller;
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+" 
+Controller konfiguratsiyasi
+"
+
 @RestController
 public class GreetingController {
 
@@ -52,6 +52,7 @@ public class GreetingController {
 
 USER va ADMIN  rolidagi foydalanuvchi uchun ruxsat etilgan yo'l! 
 <img width="2560" height="1389" alt="{4F333D54-0D44-40E8-AC3E-C3B2FE437B10}" src="https://github.com/user-attachments/assets/e05dd3ee-49a0-4736-9ab5-e279b6578bd0" />
+
 
 
 

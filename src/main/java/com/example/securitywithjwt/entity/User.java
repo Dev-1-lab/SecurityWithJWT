@@ -1,35 +1,32 @@
 package com.example.securitywithjwt.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
+
 import java.util.Collection;
-import java.util.Collections;
-import java.util.UUID;
+import java.util.List;
+
 
 @Entity
-@Data
-@Table(name = "t_users")
-public class User  implements UserDetails {
+@Getter
+@Setter
+@Table(name = "users")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Component
+public class User {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
-    @Column(unique = true,length = 20)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
+    @Column(unique = true,nullable = false)
     private String username;
+    @Column(nullable = false)
     private String password;
-    @ManyToOne(fetch = FetchType.EAGER)
-    private Role role;
-    private boolean isEnabled=true;
-    private boolean isAccountNonExpired=true;
-    private boolean isAccountNonLocked=true;
-    private boolean isCredentialsNonExpired=true;
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority(role.toString()));
-    }
-
+    private String email;
 
 }

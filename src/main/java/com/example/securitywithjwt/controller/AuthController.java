@@ -1,38 +1,33 @@
 package com.example.securitywithjwt.controller;
 
-import com.example.securitywithjwt.dto.AuthResponse;
 import com.example.securitywithjwt.dto.LoginRequest;
-import com.example.securitywithjwt.service.AuthService;
+import com.example.securitywithjwt.dto.LoginResponse;
+import com.example.securitywithjwt.dto.UserDTO;
+import com.example.securitywithjwt.entity.User;
+import com.example.securitywithjwt.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 public class AuthController {
-    private final AuthService authService;
 
-    @PostMapping
-    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest) {
-        UserDetails userDetails = authService.authenticate(
-                loginRequest.getUsername(),
-                loginRequest.getPassword());
-        String token = authService.generateToken(userDetails);
-        AuthResponse authResp = AuthResponse
-                .builder()
-                .token(token)
-                .success(true)
-                .build();
-        return ResponseEntity.ok(authResp);
+    private final UserService userService;
+
+    @PostMapping("/register")
+    public ResponseEntity<User> register(@RequestBody UserDTO dto) {
+        return ResponseEntity.ok(userService.register(dto));
     }
 
-
-
-
-
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
+        String token = userService.verify(request);
+        return ResponseEntity.ok(
+                LoginResponse.builder()
+                        .token(token)
+                        .message("Login successful")
+                        .build());
+    }
 }

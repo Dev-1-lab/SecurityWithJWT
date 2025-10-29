@@ -1,6 +1,7 @@
 package com.example.securitywithjwt.config;
 
 
+import com.example.securitywithjwt.security.JwtAuthFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,6 +21,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig {
+    private final JwtAuthFilter jwtAuthFilter;
+
+    public SecurityConfig(JwtAuthFilter jwtAuthFilter) {
+        this.jwtAuthFilter = jwtAuthFilter;
+    }
 
 
     @Bean
@@ -30,11 +36,14 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         auth ->
                                 auth
-                                        .requestMatchers("/","/api/v1/auth/**").permitAll()
+                                        .requestMatchers("/","/api/v1/auth/login").permitAll()
+                                        .requestMatchers("/api/v1/auth/register","api/v1/admin/**").hasRole("ADMIN")
+                                        .requestMatchers("/api/v1/user/**").hasAnyRole("USER","ADMIN")
                                         .anyRequest().authenticated()
                 )
                 .sessionManagement(
-                        sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                        sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 

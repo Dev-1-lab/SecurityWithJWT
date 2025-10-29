@@ -3,6 +3,7 @@ package com.example.securitywithjwt.service;
 import com.example.securitywithjwt.dto.LoginRequest;
 import com.example.securitywithjwt.dto.UserDTO;
 import com.example.securitywithjwt.entity.User;
+import com.example.securitywithjwt.entity.UserRole;
 import com.example.securitywithjwt.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,14 +21,16 @@ public class UserService {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
 
-    public User register(UserDTO userDTO) {
+    public String register(UserDTO userDTO) {
         User user = User
                 .builder()
                 .username(userDTO.getUsername())
                 .password(passwordEncoder.encode(userDTO.getPassword()))
                 .email(userDTO.getEmail())
+                .role(UserRole.ROLE_USER)
                 .build();
-        return userRepository.save(user);
+        userRepository.save(user);
+        return "Foydalanuvchi muvaffaqiyatli qo'shildi";
     }
 
     public String verify(LoginRequest loginRequest) {

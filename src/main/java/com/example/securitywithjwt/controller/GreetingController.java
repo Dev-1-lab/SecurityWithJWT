@@ -14,4 +14,15 @@ public class GreetingController {
 
 
 
+    @GetMapping("/api/v1/admin")
+    public String privatePage(){
+        return "[~~~~~~~~~~~~~WELCOME TO THE ADMIN PAGE~~~~~~~~~~~~~~~~~]";
+    }
+
+    @GetMapping("/api/v1/user")
+    public String userPage(){
+        return "[~~~~~~~~~~~~~~~~WELCOME TO THE USER PAGE~~~~~~~~~~~~~~]";
+    }
+
+
 }

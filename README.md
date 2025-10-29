@@ -31,9 +31,30 @@ public class GreetingController {
 
 
 USER va ADMIN  rolidagi foydalanuvchi uchun ruxsat etilgan yo'l! 
-<img width="2560" height="1389" alt="{4F333D54-0D44-40E8-AC3E-C3B2FE437B10}" src="https://github.com/user-attachments/assets/e05dd3ee-49a0-4736-9ab5-e279b6578bd0" />
+<img width="2560" height="1440" alt="{48FEEDE4-8A5A-404C-B61A-9282295FBBD6}" src="https://github.com/user-attachments/assets/6d771bc7-c86f-4133-9d68-3dfc876849a8" />
 
 
+
+                ~~~~~~~~~~~~~~~~~~~~Security konfiguratsiyasi~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
+        http
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(
+                        auth ->
+                                auth
+                                        .requestMatchers("/","/api/v1/auth/login").permitAll()
+                                        .requestMatchers("/api/v1/auth/register","api/v1/admin/**").hasRole("ADMIN")
+                                        .requestMatchers("/api/v1/user/**").hasAnyRole("USER","ADMIN")
+                                        .anyRequest().authenticated()
+                )
+                .sessionManagement(
+                        sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+        return http.build();
+    }
 
 
 
